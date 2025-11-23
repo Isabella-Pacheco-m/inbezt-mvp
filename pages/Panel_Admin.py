@@ -24,12 +24,24 @@ if usuario['rol'] != 'admin':
     st.error("❌ Esta página es solo para administradores")
     st.stop()
 
-st.markdown(f"""
-    <div class="header-inbezt">
-        <h1>⚙️ Panel de Administración</h1>
-        <p>Gestión completa de inBezt</p>
-    </div>
-""", unsafe_allow_html=True)
+col_header1, col_header2 = st.columns([5, 1])
+
+with col_header1:
+    st.markdown(f"""
+        <div class="header-inbezt">
+            <h1>⚙️ Panel de Administración</h1>
+            <p>Gestión completa de inBezt</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col_header2:
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("🚪 Cerrar Sesión", use_container_width=True):
+        st.session_state.usuario = None
+        st.session_state.page = None
+        st.rerun()
+
+st.markdown("---")
 
 tab1, tab2, tab3, tab4 = st.tabs(["📊 Dashboard", "📋 Solicitudes", "👥 Usuarios", "⚙️ Configuración"])
 

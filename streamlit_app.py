@@ -9,6 +9,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+st.markdown("""
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+    section[data-testid="stSidebar"] {
+        display: none;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown(aplicar_estilos_inbezt(), unsafe_allow_html=True)
 
 if 'usuario' not in st.session_state:
