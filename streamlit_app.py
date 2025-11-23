@@ -57,22 +57,27 @@ body { font-family: 'Inter', sans-serif; }
     border-top: 1px solid #eee;
 }
 
-.centered-logo-container {
-    text-align: center;
-    margin-bottom: 2rem;
+div[data-testid="column"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.centered-logo-container img {
+div[data-testid="stImage"] {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+div[data-testid="stImage"] > img {
     border-radius: 0 !important;
-    max-width: 100%;
-    height: auto;
 }
 
 img {
     border-radius: 18px !important;
 }
 
-.centered-logo-container img {
+.stImage:first-of-type img {
     border-radius: 0 !important;
 }
 </style>
@@ -99,13 +104,13 @@ elif st.session_state.page == "admin":
     exec(open("pages/Panel_Admin.py").read())
 else:
 
-    try:
-        logo = Image.open("assets/logo.jpeg")
-        st.markdown("<div class='centered-logo-container'>", unsafe_allow_html=True)
-        st.image(logo, width=220)
-        st.markdown("</div>", unsafe_allow_html=True)
-    except:
-        pass
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        try:
+            logo = Image.open("assets/logo.jpeg")
+            st.image(logo, width=220)
+        except:
+            pass
 
     st.markdown(f"""
         <div class="landing-container" style="
