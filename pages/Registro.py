@@ -4,7 +4,6 @@ from utils import aplicar_estilos_inbezt
 from PIL import Image
 import re
 
-st.set_page_config(page_title="Registro - inBezt", page_icon="📝", layout="centered")
 st.markdown(aplicar_estilos_inbezt(), unsafe_allow_html=True)
 
 try:

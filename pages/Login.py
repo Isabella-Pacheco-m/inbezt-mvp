@@ -3,7 +3,6 @@ from database import login_usuario
 from utils import aplicar_estilos_inbezt
 from PIL import Image
 
-st.set_page_config(page_title="Login - inBezt", page_icon="🔐", layout="centered")
 st.markdown(aplicar_estilos_inbezt(), unsafe_allow_html=True)
 
 try:
@@ -38,7 +37,7 @@ with col2:
         st.markdown("### Ingresa tus credenciales")
         
         email = st.text_input("📧 Email", placeholder="tu@email.com")
-        contrasena = st.text_input("🔑 Contraseña", type="password", placeholder="Tu contraseña")
+        contrasena = st.text_input("🔒 Contraseña", type="password", placeholder="Tu contraseña")
         
         submit = st.form_submit_button("Ingresar", use_container_width=True)
         

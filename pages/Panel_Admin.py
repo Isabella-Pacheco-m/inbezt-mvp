@@ -12,22 +12,18 @@ from utils import aplicar_estilos_inbezt, calcular_interes_compuesto, formatear_
 import pandas as pd
 from datetime import datetime
 
-st.set_page_config(page_title="Panel Admin - inBezt", page_icon="⚙️", layout="wide")
 st.markdown(aplicar_estilos_inbezt(), unsafe_allow_html=True)
 
-# Verificar autenticación
 if st.session_state.get('usuario') is None:
     st.warning("⚠️ Debes iniciar sesión para acceder a esta página")
     st.stop()
 
 usuario = st.session_state.usuario
 
-# Solo administradores
 if usuario['rol'] != 'admin':
     st.error("❌ Esta página es solo para administradores")
     st.stop()
 
-# Header
 st.markdown(f"""
     <div class="header-inbezt">
         <h1>⚙️ Panel de Administración</h1>
@@ -35,19 +31,15 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Tabs principales
 tab1, tab2, tab3, tab4 = st.tabs(["📊 Dashboard", "📋 Solicitudes", "👥 Usuarios", "⚙️ Configuración"])
 
-# TAB 1: Dashboard General
 with tab1:
     st.markdown("## 📊 Estadísticas Generales")
     
-    # Obtener datos
     inversiones = obtener_todas_inversiones()
     usuarios_lista = obtener_todos_usuarios()
     total_mes = total_aprobado_mes_actual()
     
-    # Métricas principales
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
@@ -71,7 +63,6 @@ with tab1:
     
     st.markdown("---")
     
-    # Gráficos y tablas
     col_a, col_b = st.columns(2)
     
     with col_a:
@@ -103,20 +94,23 @@ with tab1:
             st.write(f"**Aprobado:** {formatear_cop(total_aprobado)}")
             st.write(f"**Rechazado:** {formatear_cop(total_rechazado)}")
             
-            st.progress(total_aprobado / (total_aprobado + total_pendiente + total_rechazado + 1))
+            total_general = total_aprobado + total_pendiente + total_rechazado
+            if total_general > 0:
+                progreso = total_aprobado / total_general
+                st.progress(min(progreso, 1.0))
+            else:
+                st.progress(0.0)
         else:
             st.info("No hay datos para mostrar")
 
-# TAB 2: Gestión de Solicitudes
 with tab2:
     st.markdown("## 📋 Gestión de Solicitudes de Inversión")
     
     inversiones = obtener_todas_inversiones()
     
     if not inversiones:
-        st.info("📭 No hay solicitudes de inversión aún")
+        st.info("🔭 No hay solicitudes de inversión aún")
     else:
-        # Filtros
         col_filtro1, col_filtro2, col_filtro3 = st.columns(3)
         
         with col_filtro1:
@@ -134,7 +128,6 @@ with tab2:
                 ["Fecha (Reciente)", "Fecha (Antigua)", "Monto (Mayor)", "Monto (Menor)"]
             )
         
-        # Aplicar filtros
         inversiones_filtradas = inversiones.copy()
         
         if filtro_estado != "Todos":
@@ -146,7 +139,6 @@ with tab2:
                 if buscar_cliente.lower() in inv['cliente_nombre'].lower()
             ]
         
-        # Ordenar
         if ordenar == "Fecha (Reciente)":
             inversiones_filtradas.sort(key=lambda x: x['fecha_solicitud'], reverse=True)
         elif ordenar == "Fecha (Antigua)":
@@ -159,7 +151,6 @@ with tab2:
         st.markdown(f"**Mostrando {len(inversiones_filtradas)} de {len(inversiones)} solicitudes**")
         st.markdown("---")
         
-        # Mostrar solicitudes
         for inv in inversiones_filtradas:
             estado_color = {
                 'pendiente': '🟡',
@@ -177,7 +168,6 @@ with tab2:
                 f"{estado_color.get(inv['estado'], '⚪')} **{inv['numero_solicitud']}** | "
                 f"{inv['cliente_nombre']} | {formatear_cop(inv['monto'])} | {inv['estado'].upper()}"
             ):
-                # Información del cliente
                 st.markdown("### 👤 Información del Cliente")
                 col1, col2, col3 = st.columns(3)
                 
@@ -194,7 +184,6 @@ with tab2:
                 
                 st.markdown("---")
                 
-                # Detalles de la inversión
                 st.markdown("### 💰 Detalles de la Inversión")
                 col1, col2, col3, col4 = st.columns(4)
                 
@@ -212,7 +201,6 @@ with tab2:
                 
                 st.markdown("---")
                 
-                # Firma digital
                 st.markdown("### ✍️ Firma Digital")
                 col1, col2 = st.columns(2)
                 
@@ -222,14 +210,12 @@ with tab2:
                 with col2:
                     st.write(f"**Cédula en firma:** {inv['firma_cedula']}")
                 
-                # Notas del cliente
                 if inv['notas']:
                     st.markdown("### 📝 Notas del Cliente")
                     st.info(inv['notas'])
                 
                 st.markdown("---")
                 
-                # Acciones del administrador
                 st.markdown("### ⚙️ Acciones de Administrador")
                 
                 col_acc1, col_acc2, col_acc3 = st.columns(3)
@@ -276,7 +262,6 @@ with tab2:
                     st.write(f"**Nuevo retorno:** {formatear_cop(nueva_final)}")
                     st.write(f"**Nuevos intereses:** {formatear_cop(nuevos_int)}")
 
-# TAB 3: Usuarios
 with tab3:
     st.markdown("## 👥 Gestión de Usuarios")
     
@@ -285,7 +270,6 @@ with tab3:
     if not usuarios_lista:
         st.info("No hay usuarios registrados")
     else:
-        # Filtros
         col1, col2 = st.columns(2)
         
         with col1:
@@ -294,7 +278,6 @@ with tab3:
         with col2:
             buscar_usuario = st.text_input("🔍 Buscar usuario")
         
-        # Aplicar filtros
         usuarios_filtrados = usuarios_lista.copy()
         
         if filtro_rol != "Todos":
@@ -310,7 +293,6 @@ with tab3:
         st.markdown(f"**Mostrando {len(usuarios_filtrados)} de {len(usuarios_lista)} usuarios**")
         st.markdown("---")
         
-        # Crear tabla
         data = []
         for u in usuarios_filtrados:
             data.append({
@@ -327,7 +309,6 @@ with tab3:
         df = pd.DataFrame(data)
         st.dataframe(df, use_container_width=True, hide_index=True)
 
-# TAB 4: Configuración
 with tab4:
     st.markdown("## ⚙️ Configuración del Sistema")
     
@@ -392,9 +373,16 @@ with tab4:
         st.metric("💰 Total Invertido (Aprobado)", formatear_cop(total_invertido))
     
     with col2:
-        promedio = total_invertido / len([i for i in inversiones if i['estado'] == 'aprobado']) if inversiones else 0
+        inversiones_aprobadas = [i for i in inversiones if i['estado'] == 'aprobado']
+        if inversiones_aprobadas:
+            promedio = total_invertido / len(inversiones_aprobadas)
+        else:
+            promedio = 0
         st.metric("📊 Promedio por Inversión", formatear_cop(promedio))
     
     with col3:
-        tasa_aprobacion = (len([i for i in inversiones if i['estado'] == 'aprobado']) / len(inversiones) * 100) if inversiones else 0
+        if inversiones:
+            tasa_aprobacion = (len([i for i in inversiones if i['estado'] == 'aprobado']) / len(inversiones) * 100)
+        else:
+            tasa_aprobacion = 0
         st.metric("✅ Tasa de Aprobación", f"{tasa_aprobacion:.1f}%")
