@@ -4,7 +4,6 @@ from utils import aplicar_estilos_inbezt, calcular_interes_compuesto, formatear_
 from config import INFO_BANCARIA
 from PIL import Image
 
-st.set_page_config(page_title="Dashboard Cliente - inBezt", page_icon="💰", layout="wide")
 st.markdown(aplicar_estilos_inbezt(), unsafe_allow_html=True)
 
 if st.session_state.get('usuario') is None:
@@ -189,9 +188,9 @@ with tabs[1]:
     inversiones = obtener_inversiones_usuario(usuario['id'])
     
     if not inversiones:
-        st.info("📭 Aún no tienes inversiones. ¡Crea tu primera inversión en la pestaña Calculadora!")
+        st.info("🔭 Aún no tienes inversiones. ¡Crea tu primera inversión en la pestaña Calculadora!")
     else:
-        total_invertido = sum(inv['monto'] for inv in inversiones)
+        total_invertido = sum(float(inv['monto']) for inv in inversiones)
         aprobadas = sum(1 for inv in inversiones if inv['estado'] == 'aprobado')
         pendientes = sum(1 for inv in inversiones if inv['estado'] == 'pendiente')
         
@@ -213,13 +212,13 @@ with tabs[1]:
             
             monto_final, intereses = calcular_interes_compuesto(float(inv['monto']), float(inv['tasa_interes']), inv['tiempo_meses'])
             
-            with st.expander(f"{estado_color.get(inv['estado'], '⚪')} {inv['numero_solicitud']} - {formatear_cop(inv['monto'])} - {inv['estado'].upper()}"):
+            with st.expander(f"{estado_color.get(inv['estado'], '⚪')} {inv['numero_solicitud']} - {formatear_cop(float(inv['monto']))} - {inv['estado'].upper()}"):
                 col_a, col_b, col_c = st.columns(3)
                 
                 with col_a:
-                    st.write(f"**Monto:** {formatear_cop(inv['monto'])}")
+                    st.write(f"**Monto:** {formatear_cop(float(inv['monto']))}")
                     st.write(f"**Plazo:** {inv['tiempo_meses']} meses")
-                    st.write(f"**Tasa:** {inv['tasa_interes']}%")
+                    st.write(f"**Tasa:** {float(inv['tasa_interes'])}%")
                 
                 with col_b:
                     st.write(f"**Estado:** {inv['estado'].upper()}")

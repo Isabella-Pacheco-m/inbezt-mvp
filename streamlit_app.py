@@ -28,7 +28,7 @@ if 'usuario' not in st.session_state:
 if 'page' not in st.session_state:
     st.session_state.page = None
 
-if st.session_state.usuario is not None:
+if st.session_state.usuario is not None and st.session_state.page is None:
     if st.session_state.usuario['rol'] == 'admin':
         st.session_state.page = "admin"
     else:
