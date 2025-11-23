@@ -23,38 +23,35 @@ st.markdown("""
 [data-testid="collapsedControl"] { display: none }
 section[data-testid="stSidebar"] { display: none }
 
-body {
-    font-family: 'Inter', sans-serif;
-}
+body { font-family: 'Inter', sans-serif; }
 
 .landing-container {
     max-width: 950px;
     margin: 0 auto;
 }
 
-.card {
+.info-card {
     background: white;
-    padding: 2.3rem;
-    border-radius: 20px;
+    padding: 2rem;
+    border-radius: 18px;
+    border: 1px solid #e6e6e6;
     height: 100%;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
 }
 
-.img-card {
-    border-radius: 20px;
-    height: 100%;
+.img-rounded {
+    border-radius: 18px;
     width: 100%;
+    height: 100%;
     object-fit: cover;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .footer {
     text-align: center;
-    padding: 1rem 0 0.5rem 0;
-    color: #999;
-    font-size: 0.8rem;
+    padding: 0.6rem 0 0.3rem 0;
+    margin-top: 1.5rem;
+    color: #777;
+    font-size: 0.78rem;
     border-top: 1px solid #eee;
-    margin-top: 2rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -68,10 +65,7 @@ if 'page' not in st.session_state:
     st.session_state.page = None
 
 if st.session_state.usuario is not None and st.session_state.page is None:
-    if st.session_state.usuario['rol'] == 'admin':
-        st.session_state.page = "admin"
-    else:
-        st.session_state.page = "dashboard"
+    st.session_state.page = "admin" if st.session_state.usuario['rol'] == 'admin' else "dashboard"
 
 if st.session_state.page == "login":
     exec(open("pages/Login.py").read())
@@ -85,10 +79,9 @@ else:
 
     try:
         logo = Image.open("assets/logo.jpeg")
-        col1, col2, col3 = st.columns([1, 2, 1])
-
-        with col2:
-            st.image(logo, width=200)
+        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+        st.image(logo, width=150)
+        st.markdown("</div>", unsafe_allow_html=True)
     except:
         pass
 
@@ -96,14 +89,14 @@ else:
         <div class="landing-container" style="
             background: linear-gradient(135deg, {COLORS['light_purple']} 0%, {COLORS['light_blue']} 50%, {COLORS['light_pink']} 100%);
             padding: 3rem 2rem;
-            border-radius: 28px;
+            border-radius: 25px;
             margin: 2rem auto 3rem auto;
             text-align: center;
         ">
-            <h2 style="font-size: 2.6rem; margin-bottom: 1rem; color: #222;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: #222;">
                 Bienvenido a inBezt
             </h2>
-            <p style="font-size: 1.3rem; max-width: 780px; margin: 0 auto; color: #444; line-height: 1.7;">
+            <p style="font-size: 1.25rem; max-width: 780px; margin: 0 auto; color: #444; line-height: 1.7;">
                 La forma más <strong>segura</strong> y <strong>rentable</strong> de invertir en el sector ganadero colombiano.
             </p>
         </div>
@@ -111,15 +104,15 @@ else:
 
     st.markdown("<div class='landing-container'>", unsafe_allow_html=True)
 
-    col_a, col_b = st.columns([1, 1])
+    col_a, col_b = st.columns(2, gap="large")
 
     with col_a:
         st.markdown(f"""
-            <div class="card">
-                <h3 style="color: {COLORS['purple']}; font-size: 1.8rem; margin-bottom: 1rem;">
+            <div class="info-card">
+                <h3 style="color: {COLORS['purple']}; font-size: 1.7rem; margin-bottom: 1rem;">
                     💎 ¿Por qué invertir con inBezt?
                 </h3>
-                <ul style="font-size: 1.15rem; line-height: 2; color: #333; padding-left: 1rem;">
+                <ul style="font-size: 1.1rem; line-height: 2; padding-left: 1rem; color: #333;">
                     <li>Rentabilidad desde <strong style="color: {COLORS['purple']};">1.5% mensual</strong></li>
                     <li>Inversión mínima de <strong style="color: {COLORS['blue']};">$2.000.000 COP</strong></li>
                     <li>Contratos digitales seguros</li>
@@ -132,34 +125,41 @@ else:
     with col_b:
         try:
             ganado = Image.open("assets/ganado.jpg")
-            st.image(ganado, use_container_width=True, caption="", output_format="PNG")
+            st.image(ganado, use_container_width=True, output_format="PNG", caption="", clamp=False)
+            st.markdown("""
+                <style>
+                img {
+                    border-radius: 18px !important;
+                }
+                </style>
+            """, unsafe_allow_html=True)
         except:
             pass
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    col_btn_1, col_btn_2 = st.columns(2)
+    b1, b2 = st.columns(2)
 
-    with col_btn_1:
+    with b1:
         if st.button("🔐 Iniciar Sesión", use_container_width=True):
             st.session_state.page = "login"
             st.rerun()
 
-    with col_btn_2:
+    with b2:
         if st.button("📝 Crear Cuenta", use_container_width=True):
             st.session_state.page = "registro"
             st.rerun()
 
     st.markdown(f"""
         <div style="
-            margin-top: 3rem;
+            margin-top: 2.5rem;
             background: linear-gradient(135deg, {COLORS['purple']} 0%, {COLORS['pink']} 100%);
-            padding: 2rem;
+            padding: 1.7rem;
             border-radius: 18px;
             text-align: center;
             color: white;
         ">
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.6rem;">🚀 Comienza hoy mismo</h3>
+            <h3 style="margin-bottom: 0.5rem; font-size: 1.45rem;">🚀 Comienza hoy mismo</h3>
             <p style="font-size: 1.05rem; opacity: 0.95;">
                 Regístrate en menos de 2 minutos y empieza a hacer crecer tu capital.
             </p>
@@ -169,7 +169,7 @@ else:
     st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("""
-    <div class="footer">
-        © 2024 inBezt — Inversión Ganadera  
-    </div>
+<div class="footer">
+    © 2024 inBezt — Inversión Ganadera
+</div>
 """, unsafe_allow_html=True)
