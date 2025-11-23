@@ -57,22 +57,22 @@ body { font-family: 'Inter', sans-serif; }
     border-top: 1px solid #eee;
 }
 
-.centered-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.centered-logo-container {
+    text-align: center;
     margin-bottom: 2rem;
 }
 
-.centered-logo img {
+.centered-logo-container img {
     border-radius: 0 !important;
+    max-width: 100%;
+    height: auto;
 }
 
 img {
     border-radius: 18px !important;
 }
 
-.centered-logo img {
+.centered-logo-container img {
     border-radius: 0 !important;
 }
 </style>
@@ -101,10 +101,8 @@ else:
 
     try:
         logo = Image.open("assets/logo.jpeg")
-        st.markdown("<div class='centered-logo'>", unsafe_allow_html=True)
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            st.image(logo, width=150)
+        st.markdown("<div class='centered-logo-container'>", unsafe_allow_html=True)
+        st.image(logo, width=220)
         st.markdown("</div>", unsafe_allow_html=True)
     except:
         pass
