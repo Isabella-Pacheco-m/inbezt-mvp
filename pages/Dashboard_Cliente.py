@@ -16,33 +16,25 @@ if usuario['rol'] != 'cliente':
     st.error("❌ Esta página es solo para clientes")
     st.stop()
 
-col_logo, col_title, col_logout = st.columns([1, 4, 1])
+col_header1, col_header2 = st.columns([5, 1])
 
-with col_logo:
-    try:
-        logo = Image.open("assets/logo.jpeg")
-        st.image(logo, width=80)
-    except:
-        st.markdown("# 🐮")
-
-with col_title:
+with col_header1:
     st.markdown(f"""
-        <div style="padding: 0.5rem 0;">
-            <h2 style="margin: 0; background: linear-gradient(135deg, #9b87f5 0%, #7dd3fc 50%, #f472b6 100%); 
-                       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                {usuario['nombre']}
-            </h2>
-            <p style="margin: 0; color: #666;">Dashboard de Inversiones</p>
+        <div class="header-inbezt">
+            <h1>🐮 {usuario['nombre']}</h1>
+            <p>Dashboard de Inversiones</p>
         </div>
     """, unsafe_allow_html=True)
 
-with col_logout:
+with col_header2:
+    st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🚪 Cerrar Sesión", use_container_width=True):
         st.session_state.usuario = None
         st.session_state.page = None
         st.rerun()
 
 st.markdown("---")
+
 
 tabs = st.tabs(["🧮 Calculadora", "📈 Mis Inversiones"])
 
