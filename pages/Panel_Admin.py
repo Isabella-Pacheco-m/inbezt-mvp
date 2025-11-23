@@ -74,7 +74,7 @@ with tab1:
                 data.append({
                     'Número': inv['numero_solicitud'],
                     'Cliente': inv['cliente_nombre'],
-                    'Monto': formatear_cop(inv['monto']),
+                    'Monto': formatear_cop(float(inv['monto'])),
                     'Estado': inv['estado'].upper(),
                     'Fecha': inv['fecha_solicitud'].strftime('%Y-%m-%d')
                 })
@@ -86,9 +86,9 @@ with tab1:
     with col_b:
         st.markdown("### 💵 Inversiones por Estado")
         if inversiones:
-            total_pendiente = sum(inv['monto'] for inv in inversiones if inv['estado'] == 'pendiente')
-            total_aprobado = sum(inv['monto'] for inv in inversiones if inv['estado'] == 'aprobado')
-            total_rechazado = sum(inv['monto'] for inv in inversiones if inv['estado'] == 'rechazado')
+            total_pendiente = float(sum(inv['monto'] for inv in inversiones if inv['estado'] == 'pendiente'))
+            total_aprobado = float(sum(inv['monto'] for inv in inversiones if inv['estado'] == 'aprobado'))
+            total_rechazado = float(sum(inv['monto'] for inv in inversiones if inv['estado'] == 'rechazado'))
             
             st.write(f"**Pendiente:** {formatear_cop(total_pendiente)}")
             st.write(f"**Aprobado:** {formatear_cop(total_aprobado)}")
@@ -96,7 +96,7 @@ with tab1:
             
             total_general = total_aprobado + total_pendiente + total_rechazado
             if total_general > 0:
-                progreso = total_aprobado / total_general
+                progreso = float(total_aprobado / total_general)
                 st.progress(min(progreso, 1.0))
             else:
                 st.progress(0.0)
@@ -144,9 +144,9 @@ with tab2:
         elif ordenar == "Fecha (Antigua)":
             inversiones_filtradas.sort(key=lambda x: x['fecha_solicitud'])
         elif ordenar == "Monto (Mayor)":
-            inversiones_filtradas.sort(key=lambda x: x['monto'], reverse=True)
+            inversiones_filtradas.sort(key=lambda x: float(x['monto']), reverse=True)
         elif ordenar == "Monto (Menor)":
-            inversiones_filtradas.sort(key=lambda x: x['monto'])
+            inversiones_filtradas.sort(key=lambda x: float(x['monto']))
         
         st.markdown(f"**Mostrando {len(inversiones_filtradas)} de {len(inversiones)} solicitudes**")
         st.markdown("---")
@@ -166,7 +166,7 @@ with tab2:
             
             with st.expander(
                 f"{estado_color.get(inv['estado'], '⚪')} **{inv['numero_solicitud']}** | "
-                f"{inv['cliente_nombre']} | {formatear_cop(inv['monto'])} | {inv['estado'].upper()}"
+                f"{inv['cliente_nombre']} | {formatear_cop(float(inv['monto']))} | {inv['estado'].upper()}"
             ):
                 st.markdown("### 👤 Información del Cliente")
                 col1, col2, col3 = st.columns(3)
@@ -188,13 +188,13 @@ with tab2:
                 col1, col2, col3, col4 = st.columns(4)
                 
                 with col1:
-                    st.metric("Monto", formatear_cop(inv['monto']))
+                    st.metric("Monto", formatear_cop(float(inv['monto'])))
                 
                 with col2:
                     st.metric("Plazo", f"{inv['tiempo_meses']} meses")
                 
                 with col3:
-                    st.metric("Tasa", f"{inv['tasa_interes']}%")
+                    st.metric("Tasa", f"{float(inv['tasa_interes'])}%")
                 
                 with col4:
                     st.metric("Retorno Total", formatear_cop(monto_final))
@@ -369,7 +369,7 @@ with tab4:
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        total_invertido = sum(inv['monto'] for inv in inversiones if inv['estado'] == 'aprobado')
+        total_invertido = float(sum(inv['monto'] for inv in inversiones if inv['estado'] == 'aprobado'))
         st.metric("💰 Total Invertido (Aprobado)", formatear_cop(total_invertido))
     
     with col2:
