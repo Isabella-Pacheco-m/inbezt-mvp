@@ -36,6 +36,9 @@ body { font-family: 'Inter', sans-serif; }
     border-radius: 18px;
     border: 1px solid #e6e6e6;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .img-rounded {
@@ -52,6 +55,25 @@ body { font-family: 'Inter', sans-serif; }
     color: #777;
     font-size: 0.78rem;
     border-top: 1px solid #eee;
+}
+
+.centered-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.centered-logo img {
+    border-radius: 0 !important;
+}
+
+img {
+    border-radius: 18px !important;
+}
+
+.centered-logo img {
+    border-radius: 0 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -79,8 +101,10 @@ else:
 
     try:
         logo = Image.open("assets/logo.jpeg")
-        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-        st.image(logo, width=150)
+        st.markdown("<div class='centered-logo'>", unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col2:
+            st.image(logo, width=150)
         st.markdown("</div>", unsafe_allow_html=True)
     except:
         pass
@@ -109,30 +133,25 @@ else:
     with col_a:
         st.markdown(f"""
             <div class="info-card">
-                <h3 style="color: {COLORS['purple']}; font-size: 1.7rem; margin-bottom: 1rem;">
-                    💎 ¿Por qué invertir con inBezt?
-                </h3>
-                <ul style="font-size: 1.1rem; line-height: 2; padding-left: 1rem; color: #333;">
-                    <li>Rentabilidad desde <strong style="color: {COLORS['purple']};">1.5% mensual</strong></li>
-                    <li>Inversión mínima de <strong style="color: {COLORS['blue']};">$2.000.000 COP</strong></li>
-                    <li>Contratos digitales seguros</li>
-                    <li>Transparencia total en tu inversión</li>
-                    <li>Respaldo en el sector ganadero</li>
-                </ul>
+                <div>
+                    <h3 style="color: {COLORS['purple']}; font-size: 1.7rem; margin-bottom: 1rem;">
+                        💎 ¿Por qué invertir con inBezt?
+                    </h3>
+                    <ul style="font-size: 1.1rem; line-height: 2; padding-left: 1rem; color: #333;">
+                        <li>Rentabilidad desde <strong style="color: {COLORS['purple']};">1.5% mensual</strong></li>
+                        <li>Inversión mínima de <strong style="color: {COLORS['blue']};">$2.000.000 COP</strong></li>
+                        <li>Contratos digitales seguros</li>
+                        <li>Transparencia total en tu inversión</li>
+                        <li>Respaldo en el sector ganadero</li>
+                    </ul>
+                </div>
             </div>
         """, unsafe_allow_html=True)
 
     with col_b:
         try:
             ganado = Image.open("assets/ganado.jpg")
-            st.image(ganado, use_container_width=True, output_format="PNG", caption="", clamp=False)
-            st.markdown("""
-                <style>
-                img {
-                    border-radius: 18px !important;
-                }
-                </style>
-            """, unsafe_allow_html=True)
+            st.image(ganado, use_container_width=True)
         except:
             pass
 
