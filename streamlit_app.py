@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import aplicar_estilos_inbezt
+from utils import aplicar_estilos_inbezt, calcular_interes_compuesto, formatear_cop
 from PIL import Image
 
 COLORS = {
@@ -39,6 +39,14 @@ body { font-family: 'Inter', sans-serif; }
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.calc-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 18px;
+    border: 1px solid #e6e6e6;
+    margin: 2rem 0;
 }
 
 .img-rounded {
@@ -154,6 +162,67 @@ else:
             st.image(ganado, use_container_width=True)
         except:
             pass
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    st.markdown(f"""
+        <div class="calc-card">
+            <h3 style="color: {COLORS['purple']}; font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
+                🧮 Calcula tu Retorno de Inversión
+            </h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_calc1, col_calc2 = st.columns([2, 1])
+
+    with col_calc1:
+        monto_calc = st.number_input(
+            "💵 ¿Cuánto quieres invertir? (COP)", 
+            min_value=2000000, 
+            value=5000000, 
+            step=500000,
+            key="monto_homepage"
+        )
+        meses_calc = st.number_input(
+            "📅 ¿Por cuántos meses?", 
+            min_value=1, 
+            value=6, 
+            step=1,
+            key="meses_homepage"
+        )
+        
+        if st.button("🧮 Calcular mi Retorno", use_container_width=True, type="primary"):
+            monto_final, intereses = calcular_interes_compuesto(monto_calc, 1.5, meses_calc)
+            
+            st.markdown("---")
+            st.markdown("### 📊 Tu Inversión Generaría:")
+            
+            col_m1, col_m2, col_m3 = st.columns(3)
+            
+            with col_m1:
+                st.metric("Inversión Inicial", formatear_cop(monto_calc))
+            with col_m2:
+                st.metric("Intereses Ganados", formatear_cop(intereses))
+            with col_m3:
+                st.metric("Total a Recibir", formatear_cop(monto_final))
+            
+            st.success(f"✅ ¡Excelente! En {meses_calc} meses ganarías {formatear_cop(intereses)} de intereses.")
+            st.info("💡 **Regístrate ahora** para comenzar a invertir y hacer crecer tu capital.")
+
+    with col_calc2:
+        st.markdown(f"""
+            <div style="background: linear-gradient(135deg, {COLORS['light_purple']} 0%, {COLORS['light_blue']} 100%); 
+                        padding: 1.5rem; border-radius: 15px; height: 100%;">
+                <h4 style="color: {COLORS['purple']}; margin-bottom: 1rem;">💡 Información</h4>
+                <ul style="font-size: 0.95rem; line-height: 1.8; color: #333;">
+                    <li><strong>Tasa:</strong> 1.5% mensual</li>
+                    <li><strong>Interés:</strong> Compuesto</li>
+                    <li><strong>Mínimo:</strong> $2.000.000</li>
+                    <li><strong>Plazo:</strong> Desde 1 mes</li>
+                    <li><strong>Retiro:</strong> Al vencimiento</li>
+                </ul>
+            </div>
+        """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
