@@ -163,17 +163,19 @@ else:
         except:
             pass
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    st.markdown("<div class='landing-container'>", unsafe_allow_html=True)
+    
     st.markdown(f"""
-        <div class="calc-card">
-            <h3 style="color: {COLORS['purple']}; font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center;">
-                🧮 Calcula tu Retorno de Inversión
-            </h3>
-        </div>
+        <h3 style="color: {COLORS['purple']}; font-size: 2rem; margin-bottom: 1.5rem; text-align: center;">
+            🧮 Calcula tu Retorno de Inversión
+        </h3>
     """, unsafe_allow_html=True)
 
-    col_calc1, col_calc2 = st.columns([2, 1])
+    col_calc1, col_calc2 = st.columns([2, 1], gap="large")
 
     with col_calc1:
         monto_calc = st.number_input(
@@ -212,7 +214,7 @@ else:
     with col_calc2:
         st.markdown(f"""
             <div style="background: linear-gradient(135deg, {COLORS['light_purple']} 0%, {COLORS['light_blue']} 100%); 
-                        padding: 1.5rem; border-radius: 15px; height: 100%;">
+                        padding: 1.5rem; border-radius: 15px;">
                 <h4 style="color: {COLORS['purple']}; margin-bottom: 1rem;">💡 Información</h4>
                 <ul style="font-size: 0.95rem; line-height: 1.8; color: #333;">
                     <li><strong>Tasa:</strong> 1.5% mensual</li>
@@ -224,9 +226,13 @@ else:
             </div>
         """, unsafe_allow_html=True)
 
+    st.markdown("</div>", unsafe_allow_html=True)
+    
     st.markdown("<br>", unsafe_allow_html=True)
 
-    b1, b2 = st.columns(2)
+    st.markdown("<div class='landing-container'>", unsafe_allow_html=True)
+
+    b1, b2 = st.columns(2, gap="medium")
 
     with b1:
         if st.button("🔐 Iniciar Sesión", use_container_width=True):
@@ -258,6 +264,6 @@ else:
 
 st.markdown("""
 <div class="footer">
-    © 2024 inBezt — Inversión Ganadera
+    © 2025 inBezt — Inversión Ganadera
 </div>
 """, unsafe_allow_html=True)
